@@ -11,7 +11,7 @@ import { join } from 'path';
       type: 'better-sqlite3',
       database: join(__dirname, '..', 'db.sqlite'),
       autoLoadEntities: true,
-      synchronize: process.env.DB_SYNCHRONIZE === 'true',
+      synchronize: true, //process.env.DB_SYNCHRONIZE === 'true',
       // logging: true,
     }),
     UsersModule,
