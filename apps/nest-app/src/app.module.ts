@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
+import { RemoteServersModule } from './remote-servers/remote-servers.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   controllers: [AppController],
@@ -15,6 +17,8 @@ import { join } from 'path';
       // logging: true,
     }),
     UsersModule,
+    RemoteServersModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

@@ -1,0 +1,38 @@
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+
+export enum RemoteServerStatus {
+    ONLINE = 'online',
+    OFFLINE = 'offline',
+    UNKNOWN = 'unknown'
+}
+
+
+@Entity()
+export class RemoteServer {
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
+
+    @Column()
+    ownerId: string;
+
+    @Column()
+    userId: string;
+
+    @Column({nullable: true})
+    description?: string;
+
+    @Column({type: 'simple-json'})
+    config: Record<string, any>;
+
+    
+    @Column() //{type: 'simple-enum', enum: RemoteServerStatus, default: RemoteServerStatus.UNKNOWN}
+    status: RemoteServerStatus;
+
+    @CreateDateColumn({type: 'timestamp'})
+    createdAt: Date;
+
+    @UpdateDateColumn({type: 'timestamp'})
+    updatedAt: Date;
+    
+
+}
