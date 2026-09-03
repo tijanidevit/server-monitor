@@ -25,16 +25,6 @@ describe('UsersController', () => {
     expect(controller).toBeDefined();
   });
 
-  it('should create a user without password', () => {
-    const user: any = { name: 'John Doe', email: 'me@gmail.com' };
-    service.create.mockReturnValue(user);
-
-    const result = controller.create(user);
-
-    expect(result).toBe(user);
-    expect(service.create).toHaveBeenCalledOnce();
-    expect(service.create).toHaveBeenCalledWith(user);
-  });
 
   it('should create a user with password', () => {
     const user: any = { name: 'John Doe', email: 'me@gmail.com', password: 'password' };

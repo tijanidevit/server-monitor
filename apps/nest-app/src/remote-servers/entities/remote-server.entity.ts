@@ -28,10 +28,10 @@ export class RemoteServer {
     @Column() //{type: 'simple-enum', enum: RemoteServerStatus, default: RemoteServerStatus.UNKNOWN}
     status: RemoteServerStatus;
 
-    @CreateDateColumn({type: 'timestamp'})
+    @CreateDateColumn()
     createdAt: Date;
 
-    @UpdateDateColumn({type: 'timestamp'})
+    @UpdateDateColumn()
     updatedAt: Date;
     
 

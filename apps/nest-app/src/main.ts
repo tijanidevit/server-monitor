@@ -18,6 +18,7 @@ async function bootstrap() {
     .setTitle('Server Monitor API')
     .setDescription('Server Monitor is a powerful API for managing your servers.')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);

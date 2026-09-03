@@ -1,8 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { RemoteServersService } from './remote-servers.service';
 import { CreateRemoteServerDto } from './dto/create-remote-server.dto';
 import { UpdateRemoteServerDto } from './dto/update-remote-server.dto';
 
+@ApiBearerAuth()
 @Controller('remote-servers')
 export class RemoteServersController {
   constructor(private readonly remoteServersService: RemoteServersService) {}
