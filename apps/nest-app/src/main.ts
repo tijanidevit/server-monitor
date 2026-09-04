@@ -1,7 +1,7 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, BadRequestException } from '@nestjs/common';
 import { ResponseInterceptor } from './common/response/response.interceptor';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 
@@ -14,6 +14,7 @@ async function bootstrap() {
     whitelist: true,
     // forbidNonWhitelisted: true,
     transform: true,
+    exceptionFactory: (errors) => new BadRequestException(errors),
   }));
 
   const reflector = app.get(Reflector);

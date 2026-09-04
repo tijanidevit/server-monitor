@@ -9,7 +9,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
     let message = 'Internal server error';
-    let errors: any[] | undefined = undefined;
+    let errors: any = undefined;
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();
@@ -18,8 +18,19 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       if (typeof exceptionResponse === 'object' && exceptionResponse !== null) {
         const resObj = exceptionResponse as any;
         
-        // Handle NestJS built-in ValidationPipe errors which return an array of strings in `message`
-        if (Array.isArray(resObj.message)) {
+        if (Array.isArray(resObj.message) && resObj.message.length > 0 && resObj.message[0].property) {
+          // We received raw ValidationError[] from class-validator
+          message = 'The given data was invalid.';
+          errors = {};
+          resObj.message.forEach((err: any) => {
+            errors[err.property] = Object.values(err.constraints || {});
+          });
+        } else if (resObj.errors) {
+          // Fallback if errors were manually passed
+          message = resObj.message || 'The given data was invalid.';
+          errors = resObj.errors;
+        } else if (Array.isArray(resObj.message)) {
+          // Fallback for default ValidationPipe behavior
           message = 'Validation failed';
           errors = resObj.message.map((msg: string) => ({ message: msg }));
         } else {
