@@ -17,9 +17,11 @@ export class RemoteServersService {
     createRemoteServerDto: CreateRemoteServerDto,
     authUser: IAuthUser
   ) {
+
     return this.remoteServerRepository.save({
       ...createRemoteServerDto,
-      ownerId: authUser.id
+      ownerId: authUser.id,
+      userId: authUser.id
     })
   }
 
