@@ -1,10 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRemoteServerDto } from './dto/create-remote-server.dto';
 import { UpdateRemoteServerDto } from './dto/update-remote-server.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RemoteServer } from './entities/remote-server.entity';
 import { Repository } from 'typeorm';
-import type { IAuthUser } from '../auth/auth-user.interface';
 
 @Injectable()
 export class RemoteServersService {
@@ -15,29 +14,54 @@ export class RemoteServersService {
   
   create(
     createRemoteServerDto: CreateRemoteServerDto,
-    authUser: IAuthUser
+    ownerId: string
   ) {
 
     return this.remoteServerRepository.save({
       ...createRemoteServerDto,
-      ownerId: authUser.id,
-      userId: authUser.id
+      ownerId: ownerId,
+      userId: ownerId
     })
   }
 
-  findAll() {
-    return `This action returns all remoteServers`;
+  findAll(ownerId: string) {
+    return this.remoteServerRepository.find({
+      where: { ownerId: ownerId }
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} remoteServer`;
+  async findOne(ownerId: string, id: string) {
+    const remoteServer = await this.remoteServerRepository.findOne({
+      where: { ownerId: ownerId, id: id }
+    });
+
+    if (!remoteServer) {
+      throw new NotFoundException(`Remote Server not found`);
+    }
+
+    return remoteServer;
   }
 
-  update(id: number, updateRemoteServerDto: UpdateRemoteServerDto) {
-    return `This action updates a #${id} remoteServer`;
+  async update(ownerId: string, id: string, updateRemoteServerDto: UpdateRemoteServerDto) {
+    const remoteServer = await this.findOne(ownerId, id);
+    if (!remoteServer) {
+      throw new NotFoundException(`Remote Server not found`);
+    }
+    return this.remoteServerRepository.update({
+      ownerId: ownerId,
+      id: id
+    }, updateRemoteServerDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} remoteServer`;
+  async remove(ownerId: string, id: string) {
+    const remoteServer = await this.findOne(ownerId, id);
+    if (!remoteServer) {
+      throw new NotFoundException(`Remote Server not found`);
+    }
+    
+    return this.remoteServerRepository.delete({
+      ownerId: ownerId,
+      id: id
+    });
   }
 }

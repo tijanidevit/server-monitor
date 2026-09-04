@@ -16,10 +16,13 @@ export class RemoteServer {
     ownerId: string;
 
     @Column()
-    userId: string;
+    name: string;
 
     @Column({nullable: true})
     description?: string;
+
+    @Column({nullable: true})
+    type?: string;
 
     @Column({type: 'simple-json'})
     config: Record<string, any>;
