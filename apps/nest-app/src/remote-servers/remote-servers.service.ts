@@ -4,6 +4,7 @@ import { UpdateRemoteServerDto } from './dto/update-remote-server.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RemoteServer } from './entities/remote-server.entity';
 import { Repository } from 'typeorm';
+import type { IAuthUser } from '../auth/auth-user.interface';
 
 @Injectable()
 export class RemoteServersService {
@@ -12,8 +13,14 @@ export class RemoteServersService {
     private remoteServerRepository: Repository<RemoteServer>
   ){}
   
-  create(createRemoteServerDto: CreateRemoteServerDto) {
-    return 'This action adds a new remoteServer';
+  create(
+    createRemoteServerDto: CreateRemoteServerDto,
+    authUser: IAuthUser
+  ) {
+    return this.remoteServerRepository.save({
+      ...createRemoteServerDto,
+      ownerId: authUser.id
+    })
   }
 
   findAll() {
