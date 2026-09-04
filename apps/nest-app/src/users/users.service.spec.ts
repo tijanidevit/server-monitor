@@ -35,7 +35,7 @@ describe('UsersService', () => {
 
     const result = await service.create(user);
 
-    expect(result).toBe(user);
+    expect(result).toEqual(user);
     expect(repository.create).toHaveBeenCalledWith(user);
     expect(repository.save).toHaveBeenCalledOnce();
     expect(repository.save).toHaveBeenCalledWith(user);
@@ -47,7 +47,7 @@ describe('UsersService', () => {
 
     const result = await service.findAll();
 
-    expect(result).toBe(users);
+    expect(result).toEqual(users);
     expect(repository.find).toHaveBeenCalledOnce();
   });
 
@@ -57,7 +57,7 @@ describe('UsersService', () => {
 
     const result = await service.findOne('1');
 
-    expect(result).toBe(user);
+    expect(result).toEqual(user);
     expect(repository.findOneBy).toHaveBeenCalledOnce();
     expect(repository.findOneBy).toHaveBeenCalledWith({ id: '1' });
   });
@@ -75,7 +75,7 @@ describe('UsersService', () => {
 
     const result = await service.update('1', user);
 
-    expect(result).toBe(user);
+    expect(result).toEqual(user);
     expect(repository.update).toHaveBeenCalledOnce();
     expect(repository.update).toHaveBeenCalledWith('1', user);
   });
@@ -86,7 +86,7 @@ describe('UsersService', () => {
 
     const result = await service.remove('1');
 
-    expect(result).toBe(user);
+    expect(result).toEqual(user);
     expect(repository.delete).toHaveBeenCalledOnce();
     expect(repository.delete).toHaveBeenCalledWith('1');
   });

@@ -31,22 +31,23 @@ export class RemoteServersService {
   }
 
   async findOne(ownerId: string, id: string) {
-    const remoteServer = await this.remoteServerRepository.findOne({
-      where: { ownerId: ownerId, id: id }
-    });
+    return await this.getById(ownerId, id);
+  }
 
+  private async getById(ownerId: string, id: string) {
+    const remoteServer = await this.remoteServerRepository.findOne({
+      where: { ownerId, id }
+    });
+    
     if (!remoteServer) {
       throw new NotFoundException(`Remote Server not found`);
     }
-
     return remoteServer;
   }
 
   async update(ownerId: string, id: string, updateRemoteServerDto: UpdateRemoteServerDto) {
-    const remoteServer = await this.findOne(ownerId, id);
-    if (!remoteServer) {
-      throw new NotFoundException(`Remote Server not found`);
-    }
+    await this.getById(ownerId, id);
+
     return this.remoteServerRepository.update({
       ownerId: ownerId,
       id: id
@@ -54,10 +55,7 @@ export class RemoteServersService {
   }
 
   async remove(ownerId: string, id: string) {
-    const remoteServer = await this.findOne(ownerId, id);
-    if (!remoteServer) {
-      throw new NotFoundException(`Remote Server not found`);
-    }
+    await this.getById(ownerId, id);
     
     return this.remoteServerRepository.delete({
       ownerId: ownerId,

@@ -12,13 +12,20 @@ export class UsersService {
     private userRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    const user = this.userRepository.create(createUserDto);
-    return this.userRepository.save(user);
+  private sanitizeUser(user: User) {
+    const { password, ...result } = user;
+    return result;
   }
 
-  findAll() {
-    return this.userRepository.find();
+  async create(createUserDto: CreateUserDto) {
+    const user = this.userRepository.create(createUserDto);
+    const savedUser = await this.userRepository.save(user);
+    return this.sanitizeUser(savedUser);
+  }
+
+  async findAll() {
+    const users = await this.userRepository.find();
+    return users.map(user => this.sanitizeUser(user));
   }
 
   async findOne(id: string) {
@@ -28,9 +35,8 @@ export class UsersService {
       throw new NotFoundException(`User not found`);
     }
 
-    return user;
+    return this.sanitizeUser(user);
   }
-
 
   async findOneByEmail(email: string) {
     const user = await this.userRepository.findOneBy({ email });
